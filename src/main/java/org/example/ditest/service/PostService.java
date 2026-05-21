@@ -1,19 +1,27 @@
 package org.example.ditest.service;
 
+import lombok.RequiredArgsConstructor;
+import org.example.ditest.model.Post;
 import org.example.ditest.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-public class PostService {
-  PostRepository repository;
+import java.util.List;
 
-  @Autowired
-  public PostService(PostRepository repository) {
-    this.repository = repository;
+@Service
+@RequiredArgsConstructor
+public class PostService {
+  final PostRepository repository;
+
+//  public PostService(PostRepository repository) {
+//    this.repository = repository;
+//  }
+
+  public List<Post> getAllPost() {
+    return repository.findAll();
   }
 
-  public String getAllPost() {
-    return repository.getAllPost();
+  public int createNewPost(Post post) {
+    return repository.insertPost(post);
   }
 }
