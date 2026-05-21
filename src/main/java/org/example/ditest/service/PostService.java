@@ -1,6 +1,8 @@
 package org.example.ditest.service;
 
 import lombok.RequiredArgsConstructor;
+import org.example.ditest.dto.PostRequestDto;
+import org.example.ditest.dto.PostResponseDto;
 import org.example.ditest.model.Post;
 import org.example.ditest.repository.PostRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +23,11 @@ public class PostService {
     return repository.findAll();
   }
 
-  public int createNewPost(Post post) {
-    return repository.insertPost(post);
+  public PostResponseDto createNewPost(PostRequestDto reqDto) {
+    // refactoring 대상
+    Post post = new Post(0,reqDto.title(), reqDto.body(), 0);
+    post.setPostId(repository.insertPost(post));
+
+    return PostResponseDto.of(post);
   }
 }
