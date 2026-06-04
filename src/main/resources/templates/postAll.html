@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <h1>PostAll.html</h1>
+    <hr>
+    <table>
+        <thead>
+            <th>id</th>
+            <th>제목</th>
+<!--            <th>likes</th>-->
+        </thead>
+        <tbody>
+            <tr th:each="post : ${postList}">
+                <td th:text="${post.postId}">1</td>
+                <td th:text="${post.title}">post1 - html</td>
+<!--                <td th:text="${post.likes}">likes - html</td>-->
+            </tr>
+        </tbody>
+
+
+
+    </table>
+
+
+</body>
+</html>
