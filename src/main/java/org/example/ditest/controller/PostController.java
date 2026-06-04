@@ -23,20 +23,20 @@ public class PostController {
   @GetMapping("/posts/all")
   public String getAllPost(Model model) {
     model.addAttribute("postList", service.getAllPost());
-    log.info("get-mapping : getAllPost");
+//    log.info("get-mapping : getAllPost");
     return "postAll";
   }
 
   @GetMapping("/posts/new")
   public String createNewPost() {
-    log.info("get-mapping : createNewPost");
+//    log.info("get-mapping : createNewPost");
     return "postNew";
   }
 
   @PostMapping("/posts/new")
   public String createNewPost(@ModelAttribute PostRequestDto reqDto){
 
-    log.info("{}", reqDto);
+//    log.info("{}", reqDto);
     service.createNewPost(reqDto);
 
     return "redirect:/posts/all";
@@ -44,9 +44,9 @@ public class PostController {
 
   @GetMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId, Model model) {
-    log.info("get-mapping : updatePost : postId -- {} ", postId);
+//    log.info("get-mapping : updatePost : postId -- {} ", postId);
     PostResponseDto onePost = service.getOnePost(postId);
-    log.info("get-mapping : updatePost : findPost -- {} ", onePost);
+//    log.info("get-mapping : updatePost : findPost -- {} ", onePost);
     model.addAttribute("post", service.getOnePost(postId));
     return "postUpdate";
   }

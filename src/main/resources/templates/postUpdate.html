@@ -6,7 +6,13 @@
 </head>
 <body>
     <h1>PostUpdate.html</h1>
-    <form action="/posts/update/{postId}" method="post">
+    <form th:action method="post" th:object="${post}">
+        <label for="title">제목</label>
+        <input type="text" id="title" name="title" th:field="*{title}">
+        <label for="body">내용</label>
+        <input type="text" id="body" name="body" th:field="*{body}">
+<!--        <label for="likes">좋아요</label>-->
+<!--        <input type="text" id="likes" name="likes" th:field="${post.likes}">-->
         <input type="submit" value="수정">
     </form>
 </body>
