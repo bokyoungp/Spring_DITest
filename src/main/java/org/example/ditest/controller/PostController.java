@@ -44,7 +44,9 @@ public class PostController {
 
   @GetMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId, Model model) {
-    log.info("get-mapping : updatePost");
+    log.info("get-mapping : updatePost : postId -- {} ", postId);
+    PostResponseDto onePost = service.getOnePost(postId);
+    log.info("get-mapping : updatePost : findPost -- {} ", onePost);
     model.addAttribute("post", service.getOnePost(postId));
     return "postUpdate";
   }

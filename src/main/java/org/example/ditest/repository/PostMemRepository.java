@@ -14,6 +14,13 @@ public class PostMemRepository implements PostRepository{
   private static Map<Integer, Post> posts = new HashMap<>();
   private static int seq = 0;
 
+  public PostMemRepository() {
+    Post post = new Post(++seq, "test1", "test1", 0);
+    posts.put(seq, post);
+    post = new Post(++seq, "test2", "test2", 0);
+    posts.put(seq, post);
+  }
+
   @Override
   public List<Post> findAll() {
     return new ArrayList<>(posts.values());
@@ -21,7 +28,7 @@ public class PostMemRepository implements PostRepository{
 
   @Override
   public Post findById(int postId) {
-    return null;
+    return posts.get(postId);
   }
 
   @Override
@@ -38,6 +45,7 @@ public class PostMemRepository implements PostRepository{
 
   @Override
   public void updatePost(Post post) {
+
     posts.put(post.getPostId(), post);
   }
 }
