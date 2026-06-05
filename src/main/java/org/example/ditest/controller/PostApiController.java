@@ -36,6 +36,12 @@ public class PostApiController {
     return service.updatePostLikes(postId);
   }
 
+  @GetMapping("/posts/{postId}")
+  public ResponseEntity<PostResponseDto> getOnePost(@PathVariable int postId) {
+    PostResponseDto dto = service.getOnePost(postId);
+    return ResponseEntity.ok().eTag("\"" + dto.hashCode() + "\"").body(dto);
+  }
+
 //  @GetMapping("/posts/{postId}")
 //  public ResponseEntity<PostResponseDto> getOnePost(@PathVariable int postId) {
 //    PostResponseDto postDto = service.getOnePost(postId);
@@ -43,8 +49,4 @@ public class PostApiController {
 //        .body(postDto);
 //  }
 
-//  @PutMapping("/posts/{postId}")
-//  public PostResponseDto2 updatePost2(@PathVariable("postId") int postId) {
-//    return service.updatePost2(postId);
-//  }
 }
