@@ -15,9 +15,9 @@ public class PostMemRepository implements PostRepository{
   private static int seq = 0;
 
   public PostMemRepository() {
-    Post post = new Post(++seq, "test1", "test1", 0);
+    Post post = new Post(++seq, "test1", "body1", 0);
     posts.put(seq, post);
-    post = new Post(++seq, "test2", "test2", 0);
+    post = new Post(++seq, "test2", "body2", 0);
     posts.put(seq, post);
   }
 
