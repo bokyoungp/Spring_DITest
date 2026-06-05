@@ -15,9 +15,9 @@ public class PostMemRepository implements PostRepository{
   private static int seq = 0;
 
   public PostMemRepository() {
-    Post post = new Post(++seq, "test1", "body1", 0);
+    Post post = new Post(++seq, "test1", "body1", 0, "aaa");
     posts.put(seq, post);
-    post = new Post(++seq, "test2", "body2", 0);
+    post = new Post(++seq, "test2", "body2", 0, "bbb");
     posts.put(seq, post);
   }
 
@@ -40,6 +40,7 @@ public class PostMemRepository implements PostRepository{
 
   @Override
   public void deletePost(int postId) {
+
     posts.remove(postId);
   }
 

@@ -12,4 +12,6 @@ public class Post {
   private String title;
   private String body;
   private int likes;
+  // 추가 필드
+  private String userId;
 }

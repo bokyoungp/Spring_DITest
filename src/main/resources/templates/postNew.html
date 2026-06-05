@@ -6,6 +6,18 @@
 </head>
 <body>
     <h1>PostNew.html</h1>
+    <!-- 세션에 userId 가 있으면 로그아웃 버튼 표시 -->
+    <div th:if="${session.userInfo != null}">
+        <span th:text="${session.userInfo.username}">username</span>님 반갑습니다.
+        <form th:action="@{/logout}">
+            <button>로그아웃</button>
+        </form>
+    </div>
+    <!-- 세션이 없으면 로그인 버튼 표시 -->
+    <div th:unless="${session.userInfo != null}">
+        <a th:href="@{/login}">로그인</a>
+    </div>
+    <hr>
     <form th:action method="post">
         <label for="title">제목</label>
         <input type="text" id="title" name="title" th:value placeholder="제목을 입력하세요">

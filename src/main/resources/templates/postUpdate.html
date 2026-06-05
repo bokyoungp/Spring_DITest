@@ -6,14 +6,34 @@
 </head>
 <body>
     <h1>PostUpdate.html</h1>
+    <!-- 세션에 userId 가 있으면 로그아웃 버튼 표시 -->
+    <div th:if="${session.userInfo != null}">
+        <span th:text="${session.userInfo.username}">username</span>님 반갑습니다.
+        <form th:action="@{/logout}">
+            <button>로그아웃</button>
+        </form>
+    </div>
+    <!-- 세션이 없으면 로그인 버튼 표시 -->
+    <div th:unless="${session.userInfo != null}">
+        <a th:href="@{/login}">로그인</a>
+    </div>
+    <hr>
     <form th:action method="post" th:object="${post}">
         <label for="title">제목</label>
         <input type="text" id="title" name="title" th:field="*{title}">
         <label for="body">내용</label>
         <input type="text" id="body" name="body" th:field="*{body}">
-<!--        <label for="likes">좋아요</label>-->
-<!--        <input type="text" id="likes" name="likes" th:field="${post.likes}">-->
-        <input type="submit" value="수정">
+
+        <!-- 작성자가 아닐 때만 좋아요 버튼 표시 -->
+        <input th:if="${session.userInfo['userId'] != post.userId}"
+               type="submit" value="좋아요">
+
+    </form>
+
+    <!-- 세션 userId와 게시글 작성자 id가 같을 때만 삭제 버튼 표시 -->
+    <form th:if="${session.userInfo['userId'] == post.userId}"
+          th:action="@{/posts/delete/{postId}(postId=${post.postId})}" method="POST">
+        <button>삭제</button>
     </form>
 </body>
 </html>

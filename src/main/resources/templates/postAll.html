@@ -7,23 +7,35 @@
 <body>
     <h1>PostAll.html</h1>
     <hr>
+    <!-- 세션에 userId 가 있으면 로그아웃 버튼 표시 -->
+    <div th:if="${session.userInfo != null}">
+        <span th:text="${session.userInfo.username}">username</span>님 반갑습니다.
+        <form th:action="@{/logout}">
+            <button>로그아웃</button>
+        </form>
+    </div>
+    <!-- 세션이 없으면 로그인 버튼 표시 -->
+    <div th:unless="${session.userInfo != null}">
+        <a th:href="@{/login}">로그인</a>
+    </div>
     <table>
         <thead>
             <th>id</th>
             <th>제목</th>
-<!--            <th>likes</th>-->
+            <th>likes</th>
         </thead>
         <tbody>
             <tr th:each="post : ${postList}">
                 <td><a th:href="@{/posts/update/{postId}(postId=${post.postId})}"  th:text="${post.postId}">1</a></td>
                 <td><a th:href="@{/posts/update/{postId}(postId=${post.postId})}"  th:text="${post.title}">post1 - html</a> </td>
+                <td th:text="${post.likes}">post1 - html</td>
             </tr>
         </tbody>
-
-
-
     </table>
 
-
+    <div th:if="${session.userInfo != null}">
+        <!-- 로그인 시에만 글 등록 버튼 표시 -->
+        <a th:href="@{/posts/new}">글 등록</a>
+    </div>
 </body>
 </html>
