@@ -108,7 +108,6 @@ public class PostService {
     // 자신이 작성한 글인 경우에만 삭제 가능
     Post post = repository.findById(postId);
     if (post.getUserId().equals(userId)) {
-      log.info("동일한 사용자가 작성한 게시물이므로 삭제합니다.");
       repository.deletePost(postId);
     }
   }

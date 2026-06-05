@@ -10,6 +10,7 @@ import org.example.ditest.dto.PostResponseUserDto;
 import org.example.ditest.model.Post;
 import org.example.ditest.repository.PostRepository;
 import org.example.ditest.service.PostService;
+import org.example.ditest.session.SessionUtils;
 import org.example.ditest.session.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -40,14 +41,11 @@ public class PostController {
   @PostMapping("/posts/new")
   public String createNewPost(@ModelAttribute PostRequestDto reqDto,
                               HttpServletRequest req){
-    HttpSession session = req.getSession(false);
-    if(session != null) {
-      UserInfo userInfo = (UserInfo) session.getAttribute("userInfo");
+    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    if (userInfo == null) {
+      return "redirect:/login";
     }
-
-//    log.info("{}", reqDto);
     service.createNewPost(reqDto);
-
     return "redirect:/posts/all";
   }
 
@@ -63,13 +61,11 @@ public class PostController {
   @PostMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId,
                            HttpServletRequest req) {
-    HttpSession session = req.getSession(false);
-    UserInfo userInfo;
-    if(session != null) { // 로그인 한 사용자만 좋아요 를 증가시킬 수 있음, 본인의 글 제외
-      userInfo = (UserInfo) session.getAttribute("userInfo");
+    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    if (userInfo != null) {
+     // 로그인 한 사용자만 좋아요 를 증가시킬 수 있음, 본인의 글 제외
       service.updatePostUser(postId, userInfo.getUserId());
     }
-
     //PRG 패턴으로 리팩토링
     return "redirect:/posts/all";
   }
@@ -77,10 +73,8 @@ public class PostController {
   @PostMapping("/posts/delete/{postId}")
   public String deletePost(@PathVariable("postId") int postId,
                            HttpServletRequest req) {
-    HttpSession session = req.getSession(false);
-    UserInfo userInfo;
-    if(session != null) { // 로그인 한 사용자만 본인이 작성한 글에 한하여 삭제 가능
-      userInfo = (UserInfo) session.getAttribute("userInfo");
+    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    if (userInfo != null) { // 로그인 한 사용자만 본인이 작성한 글에 한하여 삭제 가능
       service.deletePostUser(postId, userInfo.getUserId());
     }
     //PRG 패턴으로 리팩토링

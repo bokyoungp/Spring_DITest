@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.example.ditest.dto.LoginRequestDto;
 import org.example.ditest.model.User;
 import org.example.ditest.service.UserService;
+import org.example.ditest.session.SessionInfo;
 import org.example.ditest.session.UserInfo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ public class LoginController {
     if(user != null && loginDto.getPassword().equals(user.getPassword())) {
 
       // 로그인 검증 : 사용자 id 와 password 가 일치하면 로그인 성공
+      // HttpSession 은 사용자(브라우저)별로 서버 측에 독립적으로 생성되는 객체
       // HttpSession 새롭게 생성 한 후 세션에 사용자 정보 저장
       HttpSession session = req.getSession(true);
       // cookie 설정, session 정보 저장, 응답 헤더에 쿠키 정보 담아서
@@ -51,7 +53,7 @@ public class LoginController {
 //      cookie.setSecure()
       UserInfo userInfo = new UserInfo(user.getUserId(), user.getUsername());
       // session 객체에 사용자 정보를 저장해 놓고 로그인 한 사용자정보를 어디서든 꺼내 사용할 수 있게 함
-      session.setAttribute("userInfo", userInfo);
+      session.setAttribute(SessionInfo.SESSION_NAME, userInfo); // "userInfo" 를 상수로 등록하고 이를 사용
       return "redirect:/posts/all";
     } else {    // 사용자 id 와 password 가 일치하면 로그인 실패
       return "redirect:/login";
