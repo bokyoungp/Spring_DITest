@@ -1,6 +1,9 @@
 package org.example.ditest.filter;
 
+import org.example.ditest.session.SessionManager;
+
 public class LoginFilter {
+//  public LoginFilter(SessionManager sessionManager) {}
 }
 
 // Filter에서 세션/토큰을 꺼내 인증 정보를 세팅하고,

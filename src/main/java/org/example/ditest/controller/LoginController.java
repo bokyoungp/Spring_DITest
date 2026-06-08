@@ -13,9 +13,11 @@ import org.example.ditest.session.SessionInfo;
 import org.example.ditest.session.SessionManager;
 import org.example.ditest.session.UserInfo;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.HashMap;
@@ -28,20 +30,22 @@ public class LoginController {
   private final UserService userService;
   private final SessionManager sessionManager;
 
-  @GetMapping("/login")
-  public String login() {
-    return "login";
+   @GetMapping("/login")
+  public String loginForm(@RequestParam(defaultValue = "/") String redirectURL, Model model) {
+    // 1. 인터셉터가 보낸 redirectURL을 받아서 뷰(HTML)로 넘겨줍니다.
+    // 값이 없을 경우를 대비해 기본값(defaultValue)을 "/"로 설정합니다.
+    model.addAttribute("redirectURL", redirectURL);
+    return "login"; // 로그인 HTML 파일 경로
   }
 
   @PostMapping("/login")
   public String login(@ModelAttribute LoginRequestDto loginDto,
+                      @RequestParam(defaultValue = "/") String redirectURL,
                       HttpServletRequest req,
-                      HttpServletResponse res, RedirectAttributes redirectAttributes) {
-    log.info("loginDto {} , {}", loginDto.getUserId(), loginDto.getPassword());
+                      HttpServletResponse res) {
+
 
     User user = userService.getUserInfo(loginDto.getUserId());
-    log.info("userInfo ==> {}", user);
-
 
     if(user != null && loginDto.getPassword().equals(user.getPassword())) {
 
@@ -62,8 +66,11 @@ public class LoginController {
 //      cookie.setSecure()
 
       // session 객체에 사용자 정보를 저장해 놓고 로그인 한 사용자정보를 어디서든 꺼내 사용할 수 있게 함
-      session.setAttribute(SessionInfo.SESSION_NAME, userInfo); // "userInfo" 를 상수로 등록하고 이를 사용
-      return "redirect:/posts/all";
+//      session.setAttribute(SessionInfo.SESSION_NAME, userInfo); // "userInfo" 를 상수로 등록하고 이를 사용
+
+//      return "redirect:/posts/all";
+      return "redirect:" + redirectURL;
+
     } else {    // 사용자 id 와 password 가 일치하면 로그인 실패
       return "redirect:/login";
     }
@@ -72,14 +79,17 @@ public class LoginController {
   @GetMapping("/logout")
   public String logout(HttpServletRequest req, HttpServletResponse res) {
     // 기존에 세션객체가 존재하면 가져오고 없으면 null 을 반환
-    sessionManager.remove(req);
-
     HttpSession session = req.getSession(false);
-    if(session != null) session.invalidate();
-    // 존재하는 쿠키 정보 삭제
-    Cookie cookie = new Cookie("SESSION_ID", null);
-    cookie.setMaxAge(0);
-    res.addCookie(cookie);
+
+    if(session != null) {
+      session.invalidate();
+      sessionManager.remove(req);
+      // 존재하는 쿠키 정보 삭제
+      Cookie cookie = new Cookie("SESSION_ID", null);
+      cookie.setMaxAge(0);
+      res.addCookie(cookie);
+    }
+
     return "redirect:/login";
   }
 }

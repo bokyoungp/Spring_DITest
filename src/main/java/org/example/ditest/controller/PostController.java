@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.ditest.dto.PostRequestDto;
+import org.example.ditest.dto.PostRequestUserDto;
 import org.example.ditest.dto.PostResponseDto;
 import org.example.ditest.dto.PostResponseUserDto;
 import org.example.ditest.model.Post;
@@ -37,9 +38,8 @@ public class PostController {
   //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @GetMapping("/posts/new")
   public String createNewPost(Model model, HttpServletRequest req) {
-    UserInfo userInfo = sessionManager.getUserInfo(req);
-    model.addAttribute("userInfo", userInfo);
-//    log.info("get-mapping : createNewPost");
+
+    model.addAttribute("userInfo", sessionManager.getUserInfo(req));
     return "postNew";
   }
 
@@ -51,19 +51,25 @@ public class PostController {
     if (userInfo == null) {
       return "redirect:/login";
     }
-    service.createNewPost(reqDto);
+    PostRequestUserDto reqUserDto = new PostRequestUserDto(
+        reqDto.title(), reqDto.title(), userInfo.getUserId()
+    );
+    service.createNewPostUser(reqUserDto);
     return "redirect:/posts/all";
   }
 
   //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @GetMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId, Model model, HttpServletRequest req) {
-//    log.info("get-mapping : updatePost : postId -- {} ", postId);
+
+//    UserInfo userInfo = sessionManager.getUserInfo(req);
+//    if (userInfo == null) { // 로그인 하지 않았을 경우
+//      return "redirect:/login";
+//    }
+
     PostResponseUserDto onePost = service.getOnePostUser(postId);
-//    log.info("get-mapping : updatePost : findPost -- {} ", onePost);
     model.addAttribute("post", onePost);
-    UserInfo userInfo = sessionManager.getUserInfo(req);
-    model.addAttribute("userInfo", userInfo);
+    model.addAttribute("userInfo", sessionManager.getUserInfo(req));
     return "postUpdate";
   }
 

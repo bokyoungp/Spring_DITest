@@ -7,14 +7,14 @@
 <body>
     <h1>PostAll.html</h1>
     <hr>
-    <!-- 세션에 userId 가 있으면 로그아웃 버튼 표시 -->
+    <!-- 세션에 userInfo 가 있으면 로그아웃 버튼 표시 -->
     <div th:if="${userInfo != null}">
         <span th:text="${userInfo.username}">username</span>님 반갑습니다.
         <form th:action="@{/logout}">
             <button>로그아웃</button>
         </form>
     </div>
-    <!-- 세션이 없으면 로그인 버튼 표시 -->
+    <!-- 세션, 로그인한 사용자 정보가 없으면 로그인 버튼 표시 -->
     <div th:unless="${userInfo != null}">
         <a th:href="@{/login}">로그인</a>
     </div>

@@ -1,6 +1,7 @@
 package org.example.ditest.filter;
 
 import jakarta.servlet.Filter;
+import org.example.ditest.session.SessionManager;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +10,16 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 public class FilterConfiguration {
-
+//      private final SessionManager sessionManager = new SessionManager();
+//  @Bean
+//  public FilterRegistrationBean loginCheckFilter() {
+//    FilterRegistrationBean<Filter> bean = new FilterRegistrationBean<>();
+//
+//    bean.setFilter(new LoginFilter(sessionManager)); // 직접 주입
+//    bean.setOrder(1);                               // 필터 순서
+//    bean.addUrlPatterns("/posts/*");                // 적용 URL
+//    return bean;
+//  }
 //  @Bean
 //  public FilterRegistrationBean logFilterRegister() {
 //    FilterRegistrationBean<Filter> frb = new FilterRegistrationBean<>();

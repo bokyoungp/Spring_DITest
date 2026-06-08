@@ -5,8 +5,11 @@
     <title>Title</title>
 </head>
 <body>
-    <h1>로그인</h1>
-    <form th:action="@{/login}" method="post">
+<!--    <h1>로그인</h1>-->
+<!--    <form th:action="@{/login}" method="post">-->
+<!-- th:action을 비워두거나 현재 URL을 그대로 쓰도록 설정하면
+     쿼리 파라미터(?redirectURL=/posts/new)가 POST 요청 시에도 그대로 유지됩니다. -->
+<form th:action method="post">
         <label for="userId">사용자 아이디</label>
         <input type="text" id="userId" name="userId" th:value placeholder="사용자 아이디를 입력하세요">
         <label for="password">암호</label>

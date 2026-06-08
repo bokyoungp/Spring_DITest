@@ -28,6 +28,13 @@ public class PostService {
         .toList();
   }
 
+  public List<PostResponseDto2> getAllPostLikes() {
+    return repository.findAll()
+        .stream()
+        .map(PostResponseDto2::of)
+        .toList();
+  }
+
   public List<PostResponseDto> getAllPostUser() {
 
     return repository.findAll()
@@ -76,6 +83,16 @@ public class PostService {
     return PostResponseDto.of(getPost);
   }
 
+  public PostResponseDto2 updatePostLikes(int postId) {
+    // likes 만 증가하는 update 가 biz.logic 임
+    Post post = repository.findById(postId);
+    // 수정하기
+    post.setLikes(post.getLikes() + 1);
+    repository.updatePost(post);
+
+    return PostResponseDto2.of(post);
+  }
+
 
   public void deletePost(int postId) {
 
@@ -94,15 +111,6 @@ public class PostService {
     return PostResponseUserDto.of(post);
   }
 
-  public PostResponseDto2 updatePostLikes(int postId) {
-    // likes 만 증가하는 update 가 biz.logic 임
-    Post post = repository.findById(postId);
-    // 수정하기
-    post.setLikes(post.getLikes() + 1);
-    repository.updatePost(post);
-
-    return PostResponseDto2.of(post);
-  }
 
   public void deletePostUser(int postId, String userId) {
     // 자신이 작성한 글인 경우에만 삭제 가능
@@ -112,12 +120,7 @@ public class PostService {
     }
   }
 
-  public List<PostResponseDto2> getAllPostLikes() {
-      return repository.findAll()
-          .stream()
-          .map(PostResponseDto2::of)
-          .toList();
-    }
+
 }
 
 
