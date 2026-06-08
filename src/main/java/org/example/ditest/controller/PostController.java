@@ -48,9 +48,9 @@ public class PostController {
   public String createNewPost(@ModelAttribute PostRequestDto reqDto,
                               HttpServletRequest req){
     UserInfo userInfo = sessionManager.getUserInfo(req);
-    if (userInfo == null) {
-      return "redirect:/login";
-    }
+//    if (userInfo == null) {
+//      return "redirect:/login";
+//    }
     PostRequestUserDto reqUserDto = new PostRequestUserDto(
         reqDto.title(), reqDto.title(), userInfo.getUserId()
     );
@@ -62,14 +62,14 @@ public class PostController {
   @GetMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId, Model model, HttpServletRequest req) {
 
-//    UserInfo userInfo = sessionManager.getUserInfo(req);
+    UserInfo userInfo = sessionManager.getUserInfo(req);
 //    if (userInfo == null) { // 로그인 하지 않았을 경우
 //      return "redirect:/login";
 //    }
 
     PostResponseUserDto onePost = service.getOnePostUser(postId);
     model.addAttribute("post", onePost);
-    model.addAttribute("userInfo", sessionManager.getUserInfo(req));
+    model.addAttribute("userInfo", userInfo);
     return "postUpdate";
   }
 

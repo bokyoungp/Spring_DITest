@@ -31,7 +31,7 @@ public class LoginController {
   private final SessionManager sessionManager;
 
    @GetMapping("/login")
-  public String loginForm(@RequestParam(defaultValue = "/") String redirectURL, Model model) {
+  public String login(@RequestParam(defaultValue = "/") String redirectURL, Model model) {
     // 1. 인터셉터가 보낸 redirectURL을 받아서 뷰(HTML)로 넘겨줍니다.
     // 값이 없을 경우를 대비해 기본값(defaultValue)을 "/"로 설정합니다.
     model.addAttribute("redirectURL", redirectURL);
@@ -69,6 +69,7 @@ public class LoginController {
 //      session.setAttribute(SessionInfo.SESSION_NAME, userInfo); // "userInfo" 를 상수로 등록하고 이를 사용
 
 //      return "redirect:/posts/all";
+      // /login?redirectURL=/posts/new
       return "redirect:" + redirectURL;
 
     } else {    // 사용자 id 와 password 가 일치하면 로그인 실패
