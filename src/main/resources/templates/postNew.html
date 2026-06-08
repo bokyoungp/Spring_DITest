@@ -7,14 +7,14 @@
 <body>
     <h1>PostNew.html</h1>
     <!-- 세션에 userId 가 있으면 로그아웃 버튼 표시 -->
-    <div th:if="${session.userInfo != null}">
-        <span th:text="${session.userInfo.username}">username</span>님 반갑습니다.
+    <div th:if="${userInfo != null}">
+        <span th:text="${userInfo.username}">username</span>님 반갑습니다.
         <form th:action="@{/logout}">
             <button>로그아웃</button>
         </form>
     </div>
     <!-- 세션이 없으면 로그인 버튼 표시 -->
-    <div th:unless="${session.userInfo != null}">
+    <div th:unless="${userInfo != null}">
         <a th:href="@{/login}">로그인</a>
     </div>
     <hr>

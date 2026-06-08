@@ -10,7 +10,7 @@ import org.example.ditest.dto.PostResponseUserDto;
 import org.example.ditest.model.Post;
 import org.example.ditest.repository.PostRepository;
 import org.example.ditest.service.PostService;
-import org.example.ditest.session.SessionUtils;
+import org.example.ditest.session.SessionManager;
 import org.example.ditest.session.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,25 +23,31 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class PostController {
-  final PostService service;
+  private final PostService service;
+  private final SessionManager sessionManager;
 
   @GetMapping("/posts/all")
-  public String getAllPostLikes(Model model) {
+  public String getAllPostLikes(Model model, HttpServletRequest req) {
     model.addAttribute("postList", service.getAllPostLikes());
+    UserInfo userInfo = sessionManager.getUserInfo(req);
+    model.addAttribute("userInfo", userInfo);
     return "postAll";
   }
 
+  //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @GetMapping("/posts/new")
-  public String createNewPost() {
-
+  public String createNewPost(Model model, HttpServletRequest req) {
+    UserInfo userInfo = sessionManager.getUserInfo(req);
+    model.addAttribute("userInfo", userInfo);
 //    log.info("get-mapping : createNewPost");
     return "postNew";
   }
 
+  //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @PostMapping("/posts/new")
   public String createNewPost(@ModelAttribute PostRequestDto reqDto,
                               HttpServletRequest req){
-    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    UserInfo userInfo = sessionManager.getUserInfo(req);
     if (userInfo == null) {
       return "redirect:/login";
     }
@@ -49,19 +55,23 @@ public class PostController {
     return "redirect:/posts/all";
   }
 
+  //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @GetMapping("/posts/update/{postId}")
-  public String updatePost(@PathVariable("postId") int postId, Model model) {
+  public String updatePost(@PathVariable("postId") int postId, Model model, HttpServletRequest req) {
 //    log.info("get-mapping : updatePost : postId -- {} ", postId);
     PostResponseUserDto onePost = service.getOnePostUser(postId);
 //    log.info("get-mapping : updatePost : findPost -- {} ", onePost);
     model.addAttribute("post", onePost);
+    UserInfo userInfo = sessionManager.getUserInfo(req);
+    model.addAttribute("userInfo", userInfo);
     return "postUpdate";
   }
 
+  //@LoginRequired // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @PostMapping("/posts/update/{postId}")
   public String updatePost(@PathVariable("postId") int postId,
                            HttpServletRequest req) {
-    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    UserInfo userInfo = sessionManager.getUserInfo(req);
     if (userInfo != null) {
      // 로그인 한 사용자만 좋아요 를 증가시킬 수 있음, 본인의 글 제외
       service.updatePostUser(postId, userInfo.getUserId());
@@ -70,10 +80,11 @@ public class PostController {
     return "redirect:/posts/all";
   }
 
+  //@LoginRequired  // <-- 메서드 단위로 명시적으로 처리하는 경우 사용
   @PostMapping("/posts/delete/{postId}")
   public String deletePost(@PathVariable("postId") int postId,
                            HttpServletRequest req) {
-    UserInfo userInfo = SessionUtils.getUserInfoFromCookie(req);
+    UserInfo userInfo = sessionManager.getUserInfo(req);
     if (userInfo != null) { // 로그인 한 사용자만 본인이 작성한 글에 한하여 삭제 가능
       service.deletePostUser(postId, userInfo.getUserId());
     }

@@ -24,5 +24,21 @@ public class WebConfigurer implements WebMvcConfigurer {
 //    registry.addInterceptor(new LogInterceptor3())
 //        .order(3)
 //        .addPathPatterns("/posts/**");
+
+
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//      registry.addInterceptor(new LoginCheckInterceptor())
+//          .addPathPatterns("/**")        // 모든 경로에 적용 (예>/posts/**) //  한곳에서 경로 기반으로 로그인이 필요한 것, 필요하지 않은 곳을 다룰 수 있어서 유리
+//          .excludePathPatterns(          // 로그인 없이 접근 가능한 경로 제외
+//              "/login",
+//              "/join",
+//              "/css/**",
+//              "/js/**",
+//              "/images/**"
+//          );
+//    }
+
   }
 }
+

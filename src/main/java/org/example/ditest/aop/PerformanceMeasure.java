@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 public class PerformanceMeasure {
 
   // PostService 안에 있는 모든 메서드에 실행시간을 측정하는 부가기능을 붙여줌
-  @Around("execution(* org.example.ditest.service.PostService.*(..))")
+  //@Around("execution(* org.example.ditest.service.PostService.*(..))")
   public Object performanceMeasure(ProceedingJoinPoint pjp) throws Throwable {
     String methodName = pjp.getSignature().getName();
     String className = pjp.getTarget().getClass().getName();
